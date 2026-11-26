@@ -7,9 +7,9 @@ Birzeit University · 1st Semester 2026/2027
 
 | Name | Student ID | Part |
 |---|---|---|
-| Hiba | ________ | Destination & Weather (REST Countries + Open-Meteo) |
-| ________ | ________ | Budget & Currency + Dashboard (Frankfurter) |
-| ________ | ________ | Tourist Attractions + Map (OpenTripMap) |
+| Hiba | 1220722 | Destination & Weather (REST Countries + Open-Meteo) |
+| Amal | ________ | Budget & Currency + Dashboard (Frankfurter) |
+| Dalia | ________ | Tourist Attractions + Map (OpenTripMap) |
 
 ## Description
 
