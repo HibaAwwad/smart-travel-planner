@@ -1,0 +1,32 @@
+### =============================================================
+### Student 1 — Destination & Weather
+### Open this file in VS Code with the "REST Client" extension
+### and click "Send Request" above each request.
+### =============================================================
+
+@city = Istanbul
+@lat = 41.01384
+@lon = 28.94966
+@countryCode = TR
+@rcKey = rc_live_2eb5d0ca3fc04a1dbfffd38ed5591045
+
+
+### 1. Geocoding — search a city (root: geocoding-api.open-meteo.com, path: /v1/search)
+GET https://geocoding-api.open-meteo.com/v1/search?name={{city}}&count=5&language=en&format=json
+
+
+### 2. REST Countries v5 — country by code (API key in the Authorization header)
+GET https://api.restcountries.com/countries/v5/codes.alpha_2/{{countryCode}}?response_fields=names,capitals,currencies,languages,flag,population,region&pretty=1
+Authorization: Bearer {{rcKey}}
+
+
+### 3. Open-Meteo — 16-day forecast (JSON)
+GET https://api.open-meteo.com/v1/forecast?latitude={{lat}}&longitude={{lon}}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=auto&forecast_days=16
+
+
+### 4. Same forecast as CSV (different representation)
+GET https://api.open-meteo.com/v1/forecast?latitude={{lat}}&longitude={{lon}}&daily=temperature_2m_max,temperature_2m_min&timezone=auto&format=csv
+
+
+### 5. Error case — city not found (no "results" in the response)
+GET https://geocoding-api.open-meteo.com/v1/search?name=Xyzqwerty&count=1

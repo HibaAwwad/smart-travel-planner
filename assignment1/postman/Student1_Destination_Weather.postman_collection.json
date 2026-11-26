@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Smart Travel Planner - Student 1 (Destination & Weather)",
+    "description": "REST requests used by Student 1. Set the collection variable rc_api_key to your REST Countries v5 key.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "city", "value": "Istanbul" },
+    { "key": "lat", "value": "41.01384" },
+    { "key": "lon", "value": "28.94966" },
+    { "key": "country_code", "value": "TR" },
+    { "key": "rc_api_key", "value": "rc_live_2eb5d0ca3fc04a1dbfffd38ed5591045" }
+  ],
+  "item": [
+    {
+      "name": "1. Geocoding - search city",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const r = pm.response.json().results?.[0];",
+              "pm.test('City found', () => pm.expect(r).to.exist);",
+              "if (r) {",
+              "  pm.collectionVariables.set('lat', r.latitude);",
+              "  pm.collectionVariables.set('lon', r.longitude);",
+              "  pm.collectionVariables.set('country_code', r.country_code);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://geocoding-api.open-meteo.com/v1/search?name={{city}}&count=5&language=en&format=json",
+          "protocol": "https",
+          "host": ["geocoding-api", "open-meteo", "com"],
+          "path": ["v1", "search"],
+          "query": [
+            { "key": "name", "value": "{{city}}" },
+            { "key": "count", "value": "5" },
+            { "key": "language", "value": "en" },
+            { "key": "format", "value": "json", "description": "json or protobuf (different representations)" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. REST Countries v5 - country by code",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{rc_api_key}}" }
+        ],
+        "url": {
+          "raw": "https://api.restcountries.com/countries/v5/codes.alpha_2/{{country_code}}?response_fields=names,capitals,currencies,languages,flag,population,region&pretty=1",
+          "protocol": "https",
+          "host": ["api", "restcountries", "com"],
+          "path": ["countries", "v5", "codes.alpha_2", "{{country_code}}"],
+          "query": [
+            { "key": "response_fields", "value": "names,capitals,currencies,languages,flag,population,region" },
+            { "key": "pretty", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Open-Meteo - 16-day forecast",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.open-meteo.com/v1/forecast?latitude={{lat}}&longitude={{lon}}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=auto&forecast_days=16",
+          "protocol": "https",
+          "host": ["api", "open-meteo", "com"],
+          "path": ["v1", "forecast"],
+          "query": [
+            { "key": "latitude", "value": "{{lat}}" },
+            { "key": "longitude", "value": "{{lon}}" },
+            { "key": "daily", "value": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max" },
+            { "key": "timezone", "value": "auto" },
+            { "key": "forecast_days", "value": "16" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Open-Meteo - forecast as CSV (other representation)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.open-meteo.com/v1/forecast?latitude={{lat}}&longitude={{lon}}&daily=temperature_2m_max,temperature_2m_min&timezone=auto&format=csv",
+          "protocol": "https",
+          "host": ["api", "open-meteo", "com"],
+          "path": ["v1", "forecast"],
+          "query": [
+            { "key": "latitude", "value": "{{lat}}" },
+            { "key": "longitude", "value": "{{lon}}" },
+            { "key": "daily", "value": "temperature_2m_max,temperature_2m_min" },
+            { "key": "timezone", "value": "auto" },
+            { "key": "format", "value": "csv", "description": "json (default), csv, xlsx" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Error case - city not found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://geocoding-api.open-meteo.com/v1/search?name=Xyzqwerty&count=1",
+          "protocol": "https",
+          "host": ["geocoding-api", "open-meteo", "com"],
+          "path": ["v1", "search"],
+          "query": [
+            { "key": "name", "value": "Xyzqwerty" },
+            { "key": "count", "value": "1" }
+          ]
+        }
+      }
+    }
+  ]
+}

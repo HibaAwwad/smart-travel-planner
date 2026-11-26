@@ -1,0 +1,101 @@
+/* ============================================================
+ *  destination.css — styles for the Destination & Weather section
+ *  Owner: Student 1. All classes start with "dw-" to avoid clashes.
+ * ============================================================ */
+
+.dw-section {
+  --dw-accent: #1f6feb;
+  --dw-bg: #ffffff;
+  --dw-muted: #5b6573;
+  --dw-border: #e3e8ef;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #1c2330;
+}
+
+.dw-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 20px;
+}
+.dw-form label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--dw-muted); }
+.dw-form input {
+  padding: 10px 12px;
+  border: 1px solid var(--dw-border);
+  border-radius: 8px;
+  font-size: 15px;
+}
+.dw-form input:focus { outline: 2px solid var(--dw-accent); border-color: transparent; }
+.dw-form button {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 8px;
+  background: var(--dw-accent);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+.dw-form button:disabled { opacity: .6; cursor: wait; }
+
+.dw-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 16px; }
+
+.dw-card {
+  background: var(--dw-bg);
+  border: 1px solid var(--dw-border);
+  border-radius: 12px;
+  padding: 18px;
+}
+.dw-card h3 { margin: 0 0 4px; }
+.dw-card h4 { margin: 16px 0 8px; color: var(--dw-muted); font-weight: 600; font-size: 14px; }
+.dw-card p { margin: 0; color: var(--dw-muted); }
+
+.dw-dest-header { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+.dw-flag { width: 72px; height: auto; border-radius: 4px; border: 1px solid var(--dw-border); }
+.dw-flag-emoji { font-size: 48px; line-height: 1; }
+
+.dw-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dw-table th { text-align: left; color: var(--dw-muted); font-weight: 500; padding: 6px 8px 6px 0; width: 38%; }
+.dw-table td { padding: 6px 0; }
+.dw-table tr + tr { border-top: 1px solid var(--dw-border); }
+
+.dw-weather-main { display: flex; gap: 14px; align-items: center; margin: 10px 0; }
+.dw-weather-icon { font-size: 52px; }
+.dw-weather-temp { font-size: 30px; font-weight: 700; }
+.dw-weather-temp small { font-size: 16px; color: var(--dw-muted); font-weight: 400; }
+.dw-weather-cond { color: var(--dw-muted); }
+
+.dw-facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; font-size: 14px; }
+
+.dw-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+.dw-day {
+  min-width: 74px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 4px;
+  border: 1px solid var(--dw-border);
+  border-radius: 8px;
+  font-size: 12px;
+}
+.dw-day-selected { border-color: var(--dw-accent); background: #eef4ff; }
+.dw-day-icon { font-size: 22px; }
+.dw-day-temp { font-weight: 600; }
+.dw-day-rain { color: var(--dw-muted); }
+
+.dw-error { border-color: #f1aeb5; background: #fff5f5; color: #a1262f; }
+.dw-warning { border-color: #f5d48a; background: #fffaeb; }
+.dw-note { margin-top: 10px !important; font-size: 12px; }
+
+.dw-json {
+  margin-top: 16px;
+  background: #0d1117;
+  color: #c9d1d9;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+@media (max-width: 760px) {
+  .dw-form, .dw-grid { grid-template-columns: 1fr; }
+}

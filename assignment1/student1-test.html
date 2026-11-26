@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student 1 — Destination & Weather (test page)</title>
+  <link rel="stylesheet" href="css/destination.css">
+  <style>
+    body { margin: 0; background: #f5f7fb; }
+    main { max-width: 1000px; margin: 32px auto; padding: 0 16px; }
+    h1 { font-family: system-ui, sans-serif; font-size: 24px; margin-bottom: 4px; }
+    .sub { font-family: system-ui, sans-serif; color: #5b6573; margin: 0 0 20px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>✈️ Smart Travel Planner — Destination & Weather</h1>
+  <p class="sub">Student 1 test page · Open-Meteo Geocoding + Forecast · REST Countries v5</p>
+
+  <!-- ====== Section that Student 2 copies into index.html ====== -->
+  <section id="destination-section" class="dw-section">
+    <form id="dw-form" class="dw-form">
+      <label>Destination city
+        <input id="dw-city" list="dw-city-list" placeholder="e.g. Istanbul" autocomplete="off" required>
+        <datalist id="dw-city-list"></datalist>
+      </label>
+      <label>Travel date
+        <input id="dw-date" type="date" required>
+      </label>
+      <button id="dw-submit" type="submit">Plan My Trip</button>
+    </form>
+
+    <div class="dw-grid">
+      <div id="dw-destination"></div>
+      <div id="dw-weather"></div>
+    </div>
+
+    <details>
+      <summary style="cursor:pointer;margin-top:16px;font-family:system-ui">destinationData (JSON sent to Student 2 & 3)</summary>
+      <pre id="dw-json" class="dw-json">—</pre>
+    </details>
+  </section>
+  <!-- ========================================================== -->
+</main>
+
+<!-- Load order matters -->
+<script src="js/config.js"></script>
+<script src="js/mockData.js"></script>
+<script src="js/weather.js"></script>
+<script src="js/destination.js"></script>
+<script>
+  // Small controller for testing Student 1's part alone.
+  // In the final project this logic lives in app.js (Student 2).
+  const cityInput = document.getElementById("dw-city");
+  const dateInput = document.getElementById("dw-date");
+  const submitBtn = document.getElementById("dw-submit");
+  const destBox = document.getElementById("dw-destination");
+  const weatherBox = document.getElementById("dw-weather");
+  const jsonBox = document.getElementById("dw-json");
+
+  // Allowed dates: today .. today + 15
+  const range = getForecastDateRange();
+  dateInput.min = range.min;
+  dateInput.max = range.max;
+  dateInput.value = range.min;
+
+  const getSelectedCity = attachCityAutocomplete(cityInput, document.getElementById("dw-city-list"));
+
+  document.getElementById("dw-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Loading…";
+    weatherBox.innerHTML = "";
+    destBox.innerHTML = `<div class="dw-card">Searching…</div>`;
+
+    try {
+      // Use the exact suggestion if the user picked one, otherwise the typed text
+      const city = getSelectedCity() || cityInput.value.split(",")[0];
+      const data = await getDestinationData(city, dateInput.value);
+      renderDestination(data, destBox);
+      renderWeather(data, weatherBox);
+      jsonBox.textContent = JSON.stringify({ ...data, forecast: `[${data.forecast.length} days]` }, null, 2);
+    } catch (err) {
+      renderDestinationError(err.message, destBox);
+      jsonBox.textContent = "—";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Plan My Trip";
+    }
+  });
+</script>
+</body>
+</html>
